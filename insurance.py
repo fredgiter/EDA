@@ -1,0 +1,360 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "5c7bccd9",
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "ModuleNotFoundError",
+     "evalue": "No module named 'sklearn.cross_validation'",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[1;31mModuleNotFoundError\u001b[0m                       Traceback (most recent call last)",
+      "Input \u001b[1;32mIn [1]\u001b[0m, in \u001b[0;36m<cell line: 6>\u001b[1;34m()\u001b[0m\n\u001b[0;32m      4\u001b[0m \u001b[38;5;28;01mfrom\u001b[39;00m \u001b[38;5;21;01msklearn\u001b[39;00m\u001b[38;5;21;01m.\u001b[39;00m\u001b[38;5;21;01mlinear_model\u001b[39;00m \u001b[38;5;28;01mimport\u001b[39;00m LinearRegression\n\u001b[0;32m      5\u001b[0m \u001b[38;5;28;01mfrom\u001b[39;00m \u001b[38;5;21;01msklearn\u001b[39;00m \u001b[38;5;28;01mimport\u001b[39;00m metrics\n\u001b[1;32m----> 6\u001b[0m \u001b[38;5;28;01mfrom\u001b[39;00m \u001b[38;5;21;01msklearn\u001b[39;00m\u001b[38;5;21;01m.\u001b[39;00m\u001b[38;5;21;01mcross_validation\u001b[39;00m \u001b[38;5;28;01mimport\u001b[39;00m train_test_split\n\u001b[0;32m      7\u001b[0m \u001b[38;5;28;01mimport\u001b[39;00m \u001b[38;5;21;01mnumpy\u001b[39;00m \u001b[38;5;28;01mas\u001b[39;00m \u001b[38;5;21;01mnp\u001b[39;00m\n\u001b[0;32m      9\u001b[0m \u001b[38;5;66;03m# allow plots to appear directly in the notebook\u001b[39;00m\n",
+      "\u001b[1;31mModuleNotFoundError\u001b[0m: No module named 'sklearn.cross_validation'"
+     ]
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "import seaborn as sns\n",
+    "import statsmodels.formula.api as smf\n",
+    "from sklearn.linear_model import LinearRegression\n",
+    "from sklearn import metrics\n",
+    "from sklearn.cross_validation import train_test_split\n",
+    "import numpy as np\n",
+    "\n",
+    "# allow plots to appear directly in the notebook\n",
+    "%matplotlib inline"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "a56f11c2",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>age</th>\n",
+       "      <th>sex</th>\n",
+       "      <th>bmi</th>\n",
+       "      <th>children</th>\n",
+       "      <th>smoker</th>\n",
+       "      <th>region</th>\n",
+       "      <th>charges</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>19</td>\n",
+       "      <td>female</td>\n",
+       "      <td>27.900</td>\n",
+       "      <td>0</td>\n",
+       "      <td>yes</td>\n",
+       "      <td>southwest</td>\n",
+       "      <td>16884.92400</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>18</td>\n",
+       "      <td>male</td>\n",
+       "      <td>33.770</td>\n",
+       "      <td>1</td>\n",
+       "      <td>no</td>\n",
+       "      <td>southeast</td>\n",
+       "      <td>1725.55230</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>28</td>\n",
+       "      <td>male</td>\n",
+       "      <td>33.000</td>\n",
+       "      <td>3</td>\n",
+       "      <td>no</td>\n",
+       "      <td>southeast</td>\n",
+       "      <td>4449.46200</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>33</td>\n",
+       "      <td>male</td>\n",
+       "      <td>22.705</td>\n",
+       "      <td>0</td>\n",
+       "      <td>no</td>\n",
+       "      <td>northwest</td>\n",
+       "      <td>21984.47061</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>32</td>\n",
+       "      <td>male</td>\n",
+       "      <td>28.880</td>\n",
+       "      <td>0</td>\n",
+       "      <td>no</td>\n",
+       "      <td>northwest</td>\n",
+       "      <td>3866.85520</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   age     sex     bmi  children smoker     region      charges\n",
+       "0   19  female  27.900         0    yes  southwest  16884.92400\n",
+       "1   18    male  33.770         1     no  southeast   1725.55230\n",
+       "2   28    male  33.000         3     no  southeast   4449.46200\n",
+       "3   33    male  22.705         0     no  northwest  21984.47061\n",
+       "4   32    male  28.880         0     no  northwest   3866.85520"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data = pd.read_csv('/Users/charl/Downloads/insurance.csv')\n",
+    "data.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "8bfa5e75",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(1338, 7)"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data.shape"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "d2716582",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[<AxesSubplot:title={'center':'age'}>,\n",
+       "        <AxesSubplot:title={'center':'bmi'}>],\n",
+       "       [<AxesSubplot:title={'center':'children'}>,\n",
+       "        <AxesSubplot:title={'center':'charges'}>]], dtype=object)"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 4 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "data.hist()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "0a9fe23e",
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "NameError",
+     "evalue": "name 'insurance_data' is not defined",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[1;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+      "Input \u001b[1;32mIn [8]\u001b[0m, in \u001b[0;36m<cell line: 1>\u001b[1;34m()\u001b[0m\n\u001b[1;32m----> 1\u001b[0m X \u001b[38;5;241m=\u001b[39m \u001b[43minsurance_data\u001b[49m\u001b[38;5;241m.\u001b[39mdrop(\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mcharges\u001b[39m\u001b[38;5;124m\"\u001b[39m, axis\u001b[38;5;241m=\u001b[39m\u001b[38;5;241m1\u001b[39m)\n\u001b[0;32m      2\u001b[0m y \u001b[38;5;241m=\u001b[39m insurance_data[\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mcharges\u001b[39m\u001b[38;5;124m\"\u001b[39m]\n\u001b[0;32m      3\u001b[0m X_train, X_test, y_train, y_test \u001b[38;5;241m=\u001b[39m train_test_split(X, y, test_size\u001b[38;5;241m=\u001b[39m\u001b[38;5;241m0.2\u001b[39m, random_state\u001b[38;5;241m=\u001b[39m\u001b[38;5;241m0\u001b[39m)\n",
+      "\u001b[1;31mNameError\u001b[0m: name 'insurance_data' is not defined"
+     ]
+    }
+   ],
+   "source": [
+    "X = insurance_data.drop(\"charges\", axis=1)\n",
+    "y = insurance_data[\"charges\"]\n",
+    "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)\n",
+    "X_train = pd.get_dummies(X_train, columns=[\"sex\", \"smoker\", \"region\"], drop_first=True)\n",
+    "X_test = pd.get_dummies(X_test, columns=[\"sex\", \"smoker\", \"region\"], drop_first=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "e778f0a1",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.model_selection import train_test_split\n",
+    "from sklearn.linear_model import LinearRegression\n",
+    "from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "b06ef455",
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "SyntaxError",
+     "evalue": "unexpected EOF while parsing (2509212728.py, line 5)",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;36m  Input \u001b[1;32mIn [11]\u001b[1;36m\u001b[0m\n\u001b[1;33m    X_test = pd.get_dummies(X_test, columns=[\"sex\", \"smoker\", \"region\"], drop_first=True\u001b[0m\n\u001b[1;37m                                                                                        ^\u001b[0m\n\u001b[1;31mSyntaxError\u001b[0m\u001b[1;31m:\u001b[0m unexpected EOF while parsing\n"
+     ]
+    }
+   ],
+   "source": [
+    "X = data.drop(\"charges\", axis=1)\n",
+    "y = data[\"charges\"]\n",
+    "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)\n",
+    "X_train = pd.get_dummies(X_train, columns=[\"sex\", \"smoker\", \"region\"], drop_first=True)\n",
+    "X_test = pd.get_dummies(X_test, columns=[\"sex\", \"smoker\", \"region\"], drop_first=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "df5d2051",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X = data.drop(\"charges\", axis=1)\n",
+    "y = data[\"charges\"]\n",
+    "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)\n",
+    "X_train = pd.get_dummies(X_train, columns=[\"sex\", \"smoker\", \"region\"], drop_first=True)\n",
+    "X_test = pd.get_dummies(X_test, columns=[\"sex\", \"smoker\", \"region\"], drop_first=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "8fc9af32",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "reg = LinearRegression().fit(X_train, y_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "88a4ae53",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "y_pred = reg.predict(X_test)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "id": "29dcc577",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "mae = mean_absolute_error(y_test, y_pred)\n",
+    "mse = mean_squared_error(y_test, y_pred)\n",
+    "r2 = r2_score(y_test, y_pred)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "id": "3913818e",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Mean Absolute Error: 3933.272649405234\n",
+      "Mean Squared Error: 31827950.22952383\n",
+      "R^2 Score: 0.7999876970680434\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"Mean Absolute Error:\", mae)\n",
+    "print(\"Mean Squared Error:\", mse)\n",
+    "print(\"R^2 Score:\", r2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "46d006a0",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.12"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
